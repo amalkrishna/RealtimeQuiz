@@ -1,8 +1,8 @@
 {"questions":[
-	{"question": "Question1?", "choices": ["a1111", "a2222", "a3333", "a4444"], "correctAnswer":0},
-	{"question": "Question2", "choices": ["aaaa1", "aaaa2", "aaaa3", "aaaa4"], "correctAnswer":0},
-	{"question": "Question3?", "choices": ["aqqqq1", "aqqqq2", "aqqq3", "a4"], "correctAnswer":3},
-	{"question": "Question4?", "choices": ["aqssqq1", "aqwwqq2", "www", "aqwwq4"], "correctAnswer":0}
+	{"question": "Which is the capital of india?", "choices": ["New delhi", "Mumbai", "Banglore", "Mysore"], "correctAnswer":0},
+	{"question": "Total number of states in India", "choices": ["27", "28", "29", "30"], "correctAnswer":2},
+	{"question": "Current President of India?", "choices": ["Pranab Mukherjee", "Pratibha Patil", "Narendra modi", "Manmohan singh"], "correctAnswer":0},
+	{"question": "Current Prime Minister of India?", "choices": ["Pratibha Patil", "Pranab Mukherjee", "Manmohan singh", "Narendra modi"], "correctAnswer":3}
 ]}
 
 
