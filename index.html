@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Real time Quiz</title>
+	<link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
+	<link rel="stylesheet" href="/stylesheets/style.css" />
+	<link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+	<script>
+	var socket = io.connect("http://localhost:4444");
+	var i,username,j,myscore=0,otherscore=0;
+	socket.on('updatechat', function (username, data) {
+		$('#conversation').append('<br>' + data + '<br>');
+
+	});
+
+	socket.on('game', function (data) {
+		
+			$('#realtime').append('<b>'+ data + '<br>' );
+
+			
+
+	});
+
+	function doFunction(){
+		$(".rules").fadeIn();
+	}
+
+	socket.on('sendQuestions', function(data){
+		$(".intermediate").fadeOut('slow');
+		
+		doFunction();
+		
+		i=0;
+		
+		j=0;
+		setInterval(function(){
+			$(".rules").fadeOut();
+			$(".started").fadeIn('slow');
+			$(".loading-page").fadeIn('slow');
+			$("#realresults").fadeIn('slow');
+			
+
+		if(i <= 5) {
+	
+		
+		j++;
+		$('#qst').text(data.questions[i].question);
+		$('#btn1').attr('value', 0).text(data.questions[i].choices[0]);
+		$('#btn2').attr('value', 1).text(data.questions[i].choices[1]);
+		$('#btn3').attr('value', 2).text(data.questions[i].choices[2]);
+		$('#btn4').attr('value', 3).text(data.questions[i].choices[3]);
+
+	
+
+		
+
+
+		//timer
+$(document).ready(function() {
+  
+	  var counter = 0;
+	  var c = 1;
+	  var k = setInterval(function(){
+      $(".loading-page .counter h3").html(c + "sec");
+      $(".loading-page .counter hr").css("width", (c*10) + "%");
+  
+	    counter++;
+	    c++;
+	      
+	    if(counter == 10) {
+	        clearInterval(k);
+	    }
+  }, 1000);
+});
+		//timer
+
+
+		$("#realtime button").prop('disabled', false);
+		$("#realtime button").click(function() {
+    		$("#realtime button").prop('disabled', true);
+    		var givenAns = this.value;
+    		var correctAns = data.questions[i-1].correctAnswer; 
+    		var response = (givenAns == correctAns); 
+    		if(response){
+    			
+    			socket.emit('result',username);
+    			console.log("correct ans");
+    			console.log(username);
+    			$('.current_res_c').fadeIn().delay(800).fadeOut(); j=0}
+    		
+    		else{
+    			
+    			$('.current_res_w').fadeIn().delay(800).fadeOut(); j=0}
+    		
+
+		});
+
+
+	    }i++;
+		}, 10000);
+
+		
+
+	});
+
+	socket.on('viewresult',function(usr){
+		if(usr == username){
+				myscore+=10;
+				$("#myresult").text(myscore);
+
+		}
+		else{
+			otherscore+=10;
+				$("#otherresult").text(otherscore);
+		}
+		//console.log(username);
+		//console.log("ouptput: "+ data);
+		
+		//$('#view_result').text(data.amal);
+
+	});
+
+
+	$(document).ready(function(){
+        $('#btnJoin').click(function(){
+          $(".just_start").fadeOut();
+          username = $("#input_user").val();
+          if(username !=''){
+            socket.emit('addClient', username);
+          } else {
+            alert("USERNAME PLEASE!");
+            window.location="http://localhost:4444";
+          }
+        });
+      });
+
+
+
+
+
+
+	</script>
+</head>
+<body>
+
+<div class="row">
+	<div id="realresults" style='display:none;'>
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<div id="myresult" >my</div>
+			</div>
+			<div class="col-md-6" style="float:right;">
+				<div id="otherresult" >other</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="row">
+	<div class="col-md-12 text-center">
+		<div class="rules" style='display:none;'>
+			<h2>2 Players Connected <br>The game will start in 10 seconds....</h2>
+				<div class="panel panel-warning"> 
+					<div class="panel-heading"> 
+						<h3 class="panel-title">Rules</h3> 
+					</div> 
+					<div class="panel-body"> 
+						<ul style="text-align:left;">
+							<li>Each question have have 10 seconds time..</li>
+							<li>Each question have have 10 seconds time..</li>
+							<li>Each question have have 10 seconds time..</li>
+							<li>Each question have have 10 seconds time..</li>
+						</ul>
+					</div> 
+				</div> 
+		</div>
+	</div>
+</div>
+
+
+<div class="row started" id="realtime" style='display:none;'> 
+	<div class="question">
+		<div class="row text-center">
+		  <div class="col-md-12"><h2>
+		  <br>
+		  <p id="qst"></p>
+		  </h2></div>
+		</div>
+	</div>
+
+	<div class="choices">
+		<div class="row">
+		  <div class="col-md-4 col-md-offset-3">
+		  	<button id="btn1" value=""></button>
+		  </div>
+		  <div class="col-md-3 ">
+		  	<button id="btn2" value=""></button>
+		  </div>
+		</div>
+		<div class="row">
+		  <div class="col-md-4 col-md-offset-3">
+		  	<button id="btn3" value=""></button>
+		  </div>
+		  <div class="col-md-3 ">
+		  	<button id="btn4" value=""></button>
+		  </div>
+		</div>
+	</div>
+</div>
+
+<div class="current_res_c text-center" style='display:none;'>
+<div class='alert alert-success' role='alert'>Well done! Correct Answer</div>
+</div>
+
+<div class="current_res_w text-center" style='display:none;'>
+<div class='alert alert-danger' role='alert'>Ohhhh! Wrong Answer</div>
+</div>
+
+<div class="intermediate">
+	<div id="conversation"> </div>
+</div>
+
+
+
+<div class="just_start" >
+	<div class="row text-center">
+		<h2>Just Play a Real time Trivia Quiz </h2>
+		<input type="text" id="input_user" placeholder="Enter Your Username..." required ><br>
+		<button class="btn btn-lg btn-start" id='btnJoin'>Start the Game!</button>
+	</div>
+</div>
+
+
+<div id="view_result"></div>
+
+
+<div class="loading-page" style='display:none;'>
+	<div class="counter">
+		<h3>0sec</h3>
+		<hr>
+	</div>
+</div>
+
+<!--Timer-->
+
+
+
+
+
+
+</body>
+</html>
