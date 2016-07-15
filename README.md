@@ -14,6 +14,7 @@ Extract the file `RealtimeQuiz-master.zip`
 ```
 cd RealtimeQuiz-master
 npm install
+node app.js
 ```
 
 #### visit http://localhost:4444
