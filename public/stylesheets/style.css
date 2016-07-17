@@ -52,11 +52,23 @@ h2{
     margin-top: 100px;
 }       
 
-.intermediate{
+#finalresult, .intermediate{
     margin-top:200px;
     font-size: 30px;
     text-align: center;
     color: #ee714e;
+}
+
+#finalresult_show {
+    text-align: center;
+}
+
+#finalresult_show a{
+    margin-top:200px;
+    font-size: 17px;
+    text-align: center;
+    color: #a2a2a2;
+    padding: 10px;
 }
 
 

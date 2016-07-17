@@ -9,18 +9,16 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
 	<script>
 	var socket = io.connect("http://localhost:4444");
-	var i,username,j,myscore=0,otherscore=0;
-	socket.on('updatechat', function (username, data) {
+	var i,username,j,myscore=0,otherscore=0,finalresults,ti,user_id;
+	
+	socket.on('updatechat', function (username, data,id) {
 		$('#conversation').append('<br>' + data + '<br>');
+		user_id = id;
 
 	});
 
 	socket.on('game', function (data) {
-		
 			$('#realtime').append('<b>'+ data + '<br>' );
-
-			
-
 	});
 
 	function doFunction(){
@@ -29,22 +27,20 @@
 
 	socket.on('sendQuestions', function(data){
 		$(".intermediate").fadeOut('slow');
-		
+
 		doFunction();
 		
 		i=0;
 		
 		j=0;
-		setInterval(function(){
-			$(".rules").fadeOut();
-			$(".started").fadeIn('slow');
-			$(".loading-page").fadeIn('slow');
-			$("#realresults").fadeIn('slow');
-			
 
-		if(i <= 5) {
-	
-		
+		ti = setInterval(function(){
+		$(".rules").fadeOut();
+		$(".started").fadeIn('slow');
+		$(".loading-page").fadeIn('slow');
+		$("#realresults").fadeIn('slow');
+
+		if(i < 4) {		
 		j++;
 		$('#qst').text(data.questions[i].question);
 		$('#btn1').attr('value', 0).text(data.questions[i].choices[0]);
@@ -52,28 +48,25 @@
 		$('#btn3').attr('value', 2).text(data.questions[i].choices[2]);
 		$('#btn4').attr('value', 3).text(data.questions[i].choices[3]);
 
-	
-
-		
-
 
 		//timer
-$(document).ready(function() {
-  
-	  var counter = 0;
-	  var c = 1;
-	  var k = setInterval(function(){
-      $(".loading-page .counter h3").html(c + "sec");
-      $(".loading-page .counter hr").css("width", (c*10) + "%");
-  
-	    counter++;
-	    c++;
-	      
-	    if(counter == 10) {
-	        clearInterval(k);
-	    }
-  }, 1000);
-});
+		$(document).ready(function() {
+		  
+			  var counter = 0;
+			  var c = 1;
+			  var k = setInterval(function(){
+		      $(".loading-page .counter h3").html(c + "sec");
+		      $(".loading-page .counter hr").css("width", (c*10) + "%");
+		  
+			    counter++;
+			    c++;
+			      
+			    if(counter == 10) {
+			        clearInterval(k);
+
+			    }
+		  }, 1000);
+		});
 		//timer
 
 
@@ -84,8 +77,7 @@ $(document).ready(function() {
     		var correctAns = data.questions[i-1].correctAnswer; 
     		var response = (givenAns == correctAns); 
     		if(response){
-    			
-    			socket.emit('result',username);
+    			socket.emit('result',username,user_id);
     			console.log("correct ans");
     			console.log(username);
     			$('.current_res_c').fadeIn().delay(800).fadeOut(); j=0}
@@ -93,12 +85,19 @@ $(document).ready(function() {
     		else{
     			
     			$('.current_res_w').fadeIn().delay(800).fadeOut(); j=0}
-    		
-
 		});
 
 
 	    }i++;
+
+		if(i==5){
+				clearInterval(ti);
+				$(".started").fadeOut('slow');
+				$(".loading-page").fadeOut();
+				$("#finalresult_show").fadeIn('slow');
+			}
+
+
 		}, 10000);
 
 		
@@ -115,10 +114,19 @@ $(document).ready(function() {
 			otherscore+=10;
 				$("#otherresult").text(otherscore);
 		}
-		//console.log(username);
-		//console.log("ouptput: "+ data);
-		
-		//$('#view_result').text(data.amal);
+
+		if(myscore>otherscore){
+			$("#finalresult").text("You Win!");
+			//finalresults=0;
+			//console.log("final winner");
+		} else if(myscore<otherscore){
+			$("#finalresult").text("You Lose..");
+			//finalresults=1;
+			//console.log("final loser");
+		} else{
+			//finalresults=2;
+			$("#finalresult").text("Tie!");
+		}
 
 	});
 
@@ -135,9 +143,6 @@ $(document).ready(function() {
           }
         });
       });
-
-
-
 
 
 
@@ -192,18 +197,18 @@ $(document).ready(function() {
 
 	<div class="choices">
 		<div class="row">
-		  <div class="col-md-4 col-md-offset-3">
+		  <div class="col-md-4 col-sm-6 col-md-offset-3">
 		  	<button id="btn1" value=""></button>
 		  </div>
-		  <div class="col-md-3 ">
+		  <div class="col-md-3  col-sm-6">
 		  	<button id="btn2" value=""></button>
 		  </div>
 		</div>
 		<div class="row">
-		  <div class="col-md-4 col-md-offset-3">
+		  <div class="col-md-4 col-sm-6 col-md-offset-3">
 		  	<button id="btn3" value=""></button>
 		  </div>
-		  <div class="col-md-3 ">
+		  <div class="col-md-3 col-sm-6">
 		  	<button id="btn4" value=""></button>
 		  </div>
 		</div>
@@ -245,7 +250,15 @@ $(document).ready(function() {
 
 <!--Timer-->
 
-
+<div id="finalresult_show" style='display:none;'>
+	<div id="finalresult">
+	Tie
+	</div>
+	<br>
+	<div>
+		<a href="http://localhost:4444">Play Again...</a>
+	</div>
+</div>
 
 
 

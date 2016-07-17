@@ -44,9 +44,9 @@ io.sockets.on('connection', function(socket){
 		
 		console.log(username + " joined to "+ id);
 
-		socket.emit('updatechat', 'SERVER', 'You are connected! <br> Waiting for other player to connect...');
+		socket.emit('updatechat', 'SERVER', 'You are connected! <br> Waiting for other player to connect...',id);
 		
-		socket.broadcast.to(id).emit('updatechat', 'SERVER', username + ' has joined to this game !');
+		socket.broadcast.to(id).emit('updatechat', 'SERVER', username + ' has joined to this game !',id);
 
 		
 		if(pgmstart ==2){
@@ -55,10 +55,10 @@ io.sockets.on('connection', function(socket){
 				io.sockets.in(id).emit('sendQuestions',jsoncontent);
 				
 			});
-		console.log("hooooooooooooo");
+		console.log("Player2");
 			//io.sockets.in(id).emit('game', "haaaaai");
 		} else {
-			console.log("Heeeeeeeeeeeeee");
+			console.log("Player1");
 
 		}
 
@@ -69,23 +69,12 @@ io.sockets.on('connection', function(socket){
 	});
 
 
-	socket.on('result', function (usr) {
+	socket.on('result', function (usr,rst) {
 		
-		//console.log(data);
-		//if(data=="success"){
-			
-				//scores[socket.username] += 10;
-				//console.log(scores[socket.username]); 
-				//io.sockets.in(socket.room).emit('viewresult', scores);
-				io.sockets.in(id).emit('viewresult',usr);
-
-
-		//}
-		//io.sockets.in(socket.room).emit('updatechat', socket.username, data);
-		
-		//io.sockets.in(socket.room).emit('game', "second......",pgmstart);
-
-		
+				io.sockets.in(rst).emit('viewresult',usr);
+				//io.in(id).emit('viewresult',usr);
+				//console.log("Mark = "+usr);
+				//console.log(id);	
 
 	});
 
@@ -96,7 +85,7 @@ io.sockets.on('connection', function(socket){
 		
 		delete usernames[socket.username];
 		io.sockets.emit('updateusers', usernames);
-		io.sockets.in(id).emit('updatechat', 'SERVER', socket.username + ' has disconnected');
+		io.sockets.in(id).emit('updatechat', 'SERVER', socket.username + ' has disconnected',id);
 		socket.leave(socket.room);
 	});
 });
