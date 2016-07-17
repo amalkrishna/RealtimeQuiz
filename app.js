@@ -85,7 +85,7 @@ io.sockets.on('connection', function(socket){
 		
 		delete usernames[socket.username];
 		io.sockets.emit('updateusers', usernames);
-		io.sockets.in(id).emit('updatechat', 'SERVER', socket.username + ' has disconnected',id);
+		//io.sockets.in(id).emit('updatechat', 'SERVER', socket.username + ' has disconnected',id);
 		socket.leave(socket.room);
 	});
 });
