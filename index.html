@@ -9,7 +9,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
 	<script>
 	var socket = io.connect("http://localhost:4444");
-	var i,username,j,myscore=0,otherscore=0,finalresults,ti,user_id;
+	var i,username,j=0,myscore=0,otherscore=0,finalresults,ti,user_id;
 	
 	socket.on('updatechat', function (username, data,id) {
 		$('#conversation').append('<br>' + data + '<br>');
@@ -31,8 +31,6 @@
 		doFunction();
 		
 		i=0;
-		
-		j=0;
 
 		ti = setInterval(function(){
 		$(".rules").fadeOut();
@@ -41,7 +39,7 @@
 		$("#realresults").fadeIn('slow');
 
 		if(i < 4) {		
-		j++;
+		j=0;j++;
 		$('#qst').text(data.questions[i].question);
 		$('#btn1').attr('value', 0).text(data.questions[i].choices[0]);
 		$('#btn2').attr('value', 1).text(data.questions[i].choices[1]);
@@ -77,14 +75,16 @@
     		var correctAns = data.questions[i-1].correctAnswer; 
     		var response = (givenAns == correctAns); 
     		if(response){
+    			if(j==1){
     			socket.emit('result',username,user_id);
     			console.log("correct ans");
     			console.log(username);
-    			$('.current_res_c').fadeIn().delay(800).fadeOut(); j=0}
+    			console.log("value of inner j: "+ j)
+    			$('.current_res_c').fadeIn().delay(800).fadeOut(); j++;}}
     		
     		else{
-    			
-    			$('.current_res_w').fadeIn().delay(800).fadeOut(); j=0}
+    			if(j==1){
+    			$('.current_res_w').fadeIn().delay(800).fadeOut();j++;}}
 		});
 
 
