@@ -77,7 +77,7 @@ io.sockets.on('connection', function(socket){
 				//scores[socket.username] += 10;
 				//console.log(scores[socket.username]); 
 				//io.sockets.in(socket.room).emit('viewresult', scores);
-				io.sockets.in(socket.room).emit('viewresult',usr);
+				io.sockets.in(id).emit('viewresult',usr);
 
 
 		//}
