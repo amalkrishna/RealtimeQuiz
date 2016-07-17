@@ -67,24 +67,26 @@
 		});
 		//timer
 
-
+		$("#realtime button").removeClass( "btn disabled" );
 		$("#realtime button").prop('disabled', false);
 		$("#realtime button").click(function() {
-    		$("#realtime button").prop('disabled', true);
-    		var givenAns = this.value;
-    		var correctAns = data.questions[i-1].correctAnswer; 
-    		var response = (givenAns == correctAns); 
-    		if(response){
-    			if(j==1){
-    			socket.emit('result',username,user_id);
-    			console.log("correct ans");
-    			console.log(username);
-    			console.log("value of inner j: "+ j)
-    			$('.current_res_c').fadeIn().delay(800).fadeOut(); j++;}}
+			$("#realtime button").addClass( "btn disabled" );
+    			$("#realtime button").prop('disabled', true);
+    			var givenAns = this.value;
+    			var correctAns = data.questions[i-1].correctAnswer; 
+    			var response = (givenAns == correctAns); 
+    			if(response){
+    				if(j==1){
+    				socket.emit('result',username,user_id);
+    				console.log("correct ans");
+    				console.log(username);
+    				console.log("value of inner j: "+ j)
+    				$('.current_res_c').fadeIn().delay(800).fadeOut(); j++;}
     		
-    		else{
-    			if(j==1){
-    			$('.current_res_w').fadeIn().delay(800).fadeOut();j++;}}
+    			}else {
+    				if(j==1){
+    				$('.current_res_w').fadeIn().delay(800).fadeOut();j++;}
+    			}
 		});
 
 
